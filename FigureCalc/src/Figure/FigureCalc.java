@@ -1,3 +1,5 @@
+package Figure;
+
 public interface FigureCalc {
 
     double perimeterCalc();

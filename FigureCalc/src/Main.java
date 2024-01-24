@@ -1,5 +1,7 @@
-
-
+import Figure.Circle;
+import Figure.Color;
+import Figure.Rectangle;
+import Figure.Triangle;
 
 public class Main {
     public static void main(String[] args) {

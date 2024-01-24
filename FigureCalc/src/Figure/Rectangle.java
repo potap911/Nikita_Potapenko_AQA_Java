@@ -1,4 +1,8 @@
-public class Rectangle implements FigureCalc  {
+package Figure;
+
+import Figure.Color;
+
+public class Rectangle implements FigureCalc {
 
     private double a;
     private double b;
@@ -30,7 +34,7 @@ public class Rectangle implements FigureCalc  {
 
     @Override
     public String toString() {
-        return "Rectangle{" +
+        return "Figure.Rectangle{" +
                 "a=" + a +
                 ", b=" + b +
                 ", c=" + c +

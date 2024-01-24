@@ -1,3 +1,7 @@
+package Figure;
+
+import Figure.Color;
+
 public class Triangle implements FigureCalc {
 
     private double a;
@@ -28,7 +32,7 @@ public class Triangle implements FigureCalc {
 
     @Override
     public String toString() {
-        return "Triangle{" +
+        return "Figure.Triangle{" +
                 "a=" + a +
                 ", b=" + b +
                 ", c=" + c +

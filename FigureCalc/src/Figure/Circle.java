@@ -1,3 +1,7 @@
+package Figure;
+
+import Figure.Color;
+
 public class Circle implements FigureCalc {
     private double r;
     private Color backgroundColor;
@@ -21,7 +25,7 @@ public class Circle implements FigureCalc {
 
     @Override
     public String toString() {
-        return "Circle{" +
+        return "Figure.Circle{" +
                 "r=" + r +
                 ", backgroundColor=" + backgroundColor +
                 ", borderColor=" + borderColor +
