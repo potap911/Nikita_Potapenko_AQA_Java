@@ -95,8 +95,7 @@ public class Main {
     }
 
     public static boolean isPositiveSing(int number) {
-        if (number >= 0) return true;
-        else return false;
+        return number < 0;
     }
 
     public static void printStrings(String string, int count) {
