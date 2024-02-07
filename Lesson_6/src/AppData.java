@@ -14,7 +14,7 @@ public class AppData {
         this.data = data;
     }
 
-    public static void saveToCSW(AppData appData) {
+    public static void saveToCSV(AppData appData) {
         String path;
         try {
             if (cntSave == 0) path = "AppData.csv";
@@ -51,7 +51,7 @@ public class AppData {
         }
     }
 
-    public static AppData readCSW(String path) {
+    public static AppData readCSV(String path) {
         AppData appData = null;
         String[] header = null;
         int[][] data = null;

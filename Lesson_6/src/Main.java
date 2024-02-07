@@ -2,12 +2,12 @@ public class Main {
     public static void main(String[] args) {
         AppData appDataReadTest;
 
-        AppData.saveToCSW(getAppDataTest1());
-        appDataReadTest = AppData.readCSW("AppData.csv");
+        AppData.saveToCSV(getAppDataTest1());
+        appDataReadTest = AppData.readCSV("AppData.csv");
         System.out.println(appDataReadTest.toString());
 
-        AppData.saveToCSW(getAppDataTest2());
-        appDataReadTest = AppData.readCSW("AppData.csv");
+        AppData.saveToCSV(getAppDataTest2());
+        appDataReadTest = AppData.readCSV("AppData.csv");
         System.out.println(appDataReadTest.toString());
     }
 
