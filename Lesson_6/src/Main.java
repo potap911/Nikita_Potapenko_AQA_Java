@@ -1,7 +1,14 @@
 public class Main {
     public static void main(String[] args) {
+        AppData appDataReadTest;
+
         AppData.saveToCSW(getAppDataTest1());
+        appDataReadTest = AppData.readCSW("AppData.csv");
+        System.out.println(appDataReadTest.toString());
+
         AppData.saveToCSW(getAppDataTest2());
+        appDataReadTest = AppData.readCSW("AppData.csv");
+        System.out.println(appDataReadTest.toString());
     }
 
     public static AppData getAppDataTest1() {
@@ -24,4 +31,6 @@ public class Main {
 
         return new AppData(header, data);
     }
+
+
 }

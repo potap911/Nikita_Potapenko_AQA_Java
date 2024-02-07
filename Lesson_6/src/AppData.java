@@ -1,5 +1,8 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class AppData {
     private final String[] header;
@@ -46,7 +49,50 @@ public class AppData {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public static AppData readCSW(String path) {
+        AppData appData = null;
+        String[] header = null;
+        int[][] data = null;
+
+        try {
+            BufferedReader csvReader = Files.newBufferedReader(Paths.get(path));
+            if (!csvReader.ready()) return null;
+
+            String line;
+            int lineIndex = -1;
+
+            if ((line = csvReader.readLine()) != null) {
+                header = line.split(";");
+                int row = (int) csvReader.lines().count() - 1;
+                int col = header.length;
+                data = new int[row][col];
+                csvReader.close();
+            }
+
+            csvReader = Files.newBufferedReader(Paths.get("AppData.csv"));
+
+            while ((line = csvReader.readLine()) != null) {
+                if (lineIndex == -1) {
+                    lineIndex++;
+                    continue;
+                }
+                    for (int i = lineIndex; i <= lineIndex && i < data.length; i++) {
+                        String[] lineValue = line.split(";");
+                        for (int j = 0; j < data[i].length; j++) {
+                            data[i][j] = Integer.parseInt(lineValue[j]);
+                        }
+                    }
+                lineIndex++;
+            }
+            appData = new AppData(header, data);
+            csvReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return appData;
     }
 
     public String[] getHeader() {
@@ -56,4 +102,15 @@ public class AppData {
     public int[][] getData() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("header=").append(Arrays.toString(header)).append("\n");
+        for (int[] lineData : data) {
+            builder.append("data=").append(Arrays.toString(lineData)).append("\n");
+        }
+        return builder.toString();
+    }
+
 }
