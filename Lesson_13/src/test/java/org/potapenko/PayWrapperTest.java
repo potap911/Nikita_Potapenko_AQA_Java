@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +36,7 @@ class PayWrapperTest {
     @Test
     @DisplayName("Проверка названия блока")
     void nameBlockTest() {
-        WebElement nameBlock = driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/h2"));
+        WebElement nameBlock = driver.findElement(By.xpath("//*[@class=\"pay__wrapper\"]/h2"));
         assertTrue(nameBlock.isDisplayed() && nameBlock.isEnabled());
         assertEquals(nameBlock.getText(), "Онлайн пополнение\n" +
                 "без комиссии");
@@ -44,14 +45,15 @@ class PayWrapperTest {
     @Test
     @DisplayName("Наличие логотипов платёжных систем")
     void availabilityPaymentSystemLogosTest() {
-        WebElement logos = driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/div[2]"));
-        assertTrue(logos.isDisplayed() && logos.isEnabled());
+        List<WebElement> partners = driver.findElements(By.xpath("//*[@class=\"pay__partners\"]/ul/li"));
+        partners.forEach(partner -> assertTrue(partner.isDisplayed() && partner.isEnabled()));
+        assertEquals(partners.size(), 6);
     }
 
     @Test
     @DisplayName("Проверка ссылки «Подробнее о сервисе»")
     void linkMoreAboutServiceTest() {
-        WebElement link = driver.findElement(By.xpath("//*[@id=\"pay-section\"]/div/div/div[2]/section/div/a"));
+        WebElement link = driver.findElement(By.xpath("//*[@class=\"pay__wrapper\"]/a"));
 
         assertEquals(link.getText(), "Подробнее о сервисе");
         assertTrue(link.isDisplayed() && link.isEnabled());
