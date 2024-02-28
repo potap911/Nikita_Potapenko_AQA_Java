@@ -27,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PayWrapperTest {
     static WebDriver driver;
-    static JavascriptExecutor js;
+    private PayWrapperPage page;
+    private String labelInputField;
 
     @BeforeAll
     static void setupAll() {
@@ -40,7 +41,7 @@ class PayWrapperTest {
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         driver.manage().window().maximize();
         driver.get("https://www.mts.by/");
-        js = (JavascriptExecutor) driver;
+        page = new PayWrapperPage(driver);
     }
 
     @AfterEach
@@ -51,125 +52,100 @@ class PayWrapperTest {
     @Test
     @DisplayName("Проверка надписи в незаполненных полях варианта 'Услуги связи'")
     void titleFieldPaymentServiceTest1() {
-        WebElement selectHeader = driver.findElement(By.xpath("//*[@class=\"select__header\"]"));
-        js.executeScript("arguments[0].click();", selectHeader);
+        page.clickSelectHeader();
+        page.clickPayOption();
 
-        WebElement payOption = driver.findElement(By.xpath("//*[@class=\"select__list\"]/li"));
-        js.executeScript("arguments[0].click();", payOption);
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div/input")).getAttribute("placeholder");
+        assertEquals("Номер телефона", labelInputField);
 
-        WebElement input;
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div[2]/input")).getAttribute("placeholder");
+        assertEquals("Сумма", labelInputField);
 
-        input = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div/input"));
-        assertEquals("Номер телефона", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div[2]/input"));
-        assertEquals("Сумма", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div[3]/input"));
-        assertEquals("E-mail для отправки чека", input.getAttribute("placeholder"));
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/div[3]/input")).getAttribute("placeholder");
+        assertEquals("E-mail для отправки чека", labelInputField);
     }
 
     @Test
     @DisplayName("Проверка надписи в незаполненных полях варианта 'Домашний интернет'")
     void titleFieldPaymentServiceTest2() {
-        WebElement selectHeader = driver.findElement(By.xpath("//*[@class=\"select__header\"]"));
-        js.executeScript("arguments[0].click();", selectHeader);
+        page.clickSelectHeader();
+        page.clickPayOption();
 
-        WebElement payOption = driver.findElement(By.xpath("//*[@class=\"select__list\"]/li[2]"));
-        js.executeScript("arguments[0].click();", payOption);
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div/input")).getAttribute("placeholder");
+        assertEquals("Номер абонента", labelInputField);
 
-        WebElement input;
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div[2]/input")).getAttribute("placeholder");
+        assertEquals("Сумма", labelInputField);
 
-        input = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div/input"));
-        assertEquals("Номер абонента", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div[2]/input"));
-        assertEquals("Сумма", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div[3]/input"));
-        assertEquals("E-mail для отправки чека", input.getAttribute("placeholder"));
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-internet\"]/div[3]/input")).getAttribute("placeholder");
+        assertEquals("E-mail для отправки чека", labelInputField);
     }
 
     @Test
     @DisplayName("Проверка надписи в незаполненных полях варианта 'Рассрочка'")
     void titleFieldPaymentServiceTest3() {
-        WebElement selectHeader = driver.findElement(By.xpath("//*[@class=\"select__header\"]"));
-        js.executeScript("arguments[0].click();", selectHeader);
+        page.clickSelectHeader();
+        page.clickPayOption();
 
-        WebElement payOption = driver.findElement(By.xpath("//*[@class=\"select__list\"]/li[3]"));
-        js.executeScript("arguments[0].click();", payOption);
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div/input")).getAttribute("placeholder");
+        assertEquals("Номер счета на 44", labelInputField);
 
-        WebElement input;
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div[2]/input")).getAttribute("placeholder");
+        assertEquals("Сумма", labelInputField);
 
-        input = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div/input"));
-        assertEquals("Номер счета на 44", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div[2]/input"));
-        assertEquals("Сумма", input.getAttribute("placeholder"));
-
-        input = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div[3]/input"));
-        assertEquals("E-mail для отправки чека", input.getAttribute("placeholder"));
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-instalment\"]/div[3]/input")).getAttribute("placeholder");
+        assertEquals("E-mail для отправки чека", labelInputField);
     }
 
     @Test
     @DisplayName("Проверка надписи в незаполненных полях варианта 'Задолженность'")
     void titleFieldPaymentServiceTest4() {
-        WebElement selectHeader = driver.findElement(By.xpath("//*[@class=\"select__header\"]"));
-        js.executeScript("arguments[0].click();", selectHeader);
+        page.clickSelectHeader();
+        page.clickPayOption();
 
-        WebElement payOption = driver.findElement(By.xpath("//*[@class=\"select__list\"]/li[4]"));
-        js.executeScript("arguments[0].click();", payOption);
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div/input")).getAttribute("placeholder");
+        assertEquals("Номер счета на 2073", labelInputField);
 
-        WebElement inputField;
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div[2]/input")).getAttribute("placeholder");
+        assertEquals("Сумма", labelInputField);
 
-        inputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div/input"));
-        assertEquals("Номер счета на 2073", inputField.getAttribute("placeholder"));
-
-        inputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div[2]/input"));
-        assertEquals("Сумма", inputField.getAttribute("placeholder"));
-
-        inputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div[3]/input"));
-        assertEquals("E-mail для отправки чека", inputField.getAttribute("placeholder"));
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"pay-arrears\"]/div[3]/input")).getAttribute("placeholder");
+        assertEquals("E-mail для отправки чека", labelInputField);
     }
 
     @Test
     @DisplayName("Заполнение полей в варианте 'Услуги связи', проверка полей ввода реквизитов карты")
     void continueButtonTest() {
-        WebElement phoneField = driver.findElement(By.id("connection-phone"));
-        js.executeScript("arguments[0].click();", phoneField);
-        phoneField.sendKeys("297777777");
+        page.inputPhone("297777777");
+        page.inputSum("100");
+        page.clickContinueButton();
 
-        WebElement sumField = driver.findElement(By.id("connection-sum"));
-        js.executeScript("arguments[0].click();", sumField);
-        sumField.sendKeys("100");
+        driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@class=\"bepaid-iframe\"]")));
 
-        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"pay-connection\"]/button"));
-        js.executeScript("arguments[0].click();", continueButton);
+        labelInputField = driver.findElement(By.xpath("//*[@class=\"header__payment-amount\"]/span"))
+                .getAttribute("innerHTML");
+        assertEquals("100.00 BYN", labelInputField);
 
-        driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div[8]/div/iframe")));
+        labelInputField = driver.findElement(By.xpath("//*[@class=\"header__payment-info\"]"))
+                .getAttribute("innerHTML");
+        assertEquals(" Оплата: Услуги связи\nНомер:375297777777 ", labelInputField);
 
-        WebElement inputField;
+        labelInputField = driver.findElement(By.xpath("//*[@id=\"cc-number\"]/following-sibling::label"))
+                .getAttribute("innerHTML");
+        assertEquals("Номер карты", labelInputField);
 
-        inputField = driver.findElement(By.xpath("//*[@class=\"header__payment-amount\"]/span"));
-        assertEquals("100.00 BYN", inputField.getAttribute("innerHTML"));
+        labelInputField = driver.findElement(By.xpath("//*[@class=\"ng-tns-c47-4 ng-star-inserted\"]"))
+                .getAttribute("innerHTML");
+        assertEquals("Срок действия", labelInputField);
 
-        inputField = driver.findElement(By.xpath("//*[@class=\"header__payment-info\"]"));
-        assertEquals("Оплата: Услуги связи\nНомер:375297777777", inputField.getAttribute("innerHTML").trim());
+        labelInputField = driver.findElement(By.xpath("//*[@class=\"ng-tns-c47-3 ng-star-inserted\"]"))
+                .getAttribute("innerHTML");
+        assertEquals("Имя держателя (как на карте)", labelInputField);
 
-        inputField = driver.findElement(By.xpath("//*[@class=\"ng-tns-c47-1 ng-star-inserted\"]"));
-        assertEquals("Номер карты", inputField.getAttribute("innerHTML"));
-
-        inputField = driver.findElement(By.xpath("//*[@class=\"ng-tns-c47-4 ng-star-inserted\"]"));
-        assertEquals("Срок действия", inputField.getAttribute("innerHTML"));
-
-        inputField = driver.findElement(By.xpath("//*[@class=\"ng-tns-c47-3 ng-star-inserted\"]"));
-        assertEquals("Имя держателя (как на карте)", inputField.getAttribute("innerHTML"));
-
-        List<WebElement> iconsContainer = driver.findElements(By.xpath("//*[@class=\"ng-tns-c53-0 ng-star-inserted\"]"));
-        assertEquals(4, iconsContainer.size());
         try {
-            iconsContainer.forEach(icon -> js.executeScript("arguments[0].click();", icon));
-        } catch (ElementClickInterceptedException e) {
+            List<WebElement> iconsContainer = driver.findElements(By.xpath("//*[@class=\"ng-tns-c53-0 ng-star-inserted\"]"));
+            assertEquals(4, iconsContainer.size());
+        } catch (NoSuchElementException e) {
             fail();
         }
 
