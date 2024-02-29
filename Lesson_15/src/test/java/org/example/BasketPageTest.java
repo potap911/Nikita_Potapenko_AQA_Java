@@ -4,38 +4,40 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe;
 
 class BasketPageTest {
 
     static WebDriver driver;
     private MainPage mainPage;
     private BasketPage basketPage;
-    Wait<WebDriver> wait;
-
+    private static final int COUNT_GOODS = 5;
     @BeforeAll
-    static void setupAll() {
-        WebDriverManager.chromedriver().setup();
-    }
+    static void setupWebDriverManager() { WebDriverManager.chromedriver().setup(); }
 
     @BeforeEach
-    void setupDriver() {
+    void setupAll() {
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         driver.manage().window().maximize();
         driver.get("https://www.wildberries.ru/");
         mainPage = new MainPage(driver);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+    }
+
+    @BeforeEach
+    void executeAddProduct() throws InterruptedException {
+        for (int i = 1; i <= COUNT_GOODS; i++) {
+            mainPage.addProduct(i);
+        }
+        mainPage.clickButtonBasket();
+        basketPage = new BasketPage(driver);
+
+        Thread.sleep(1000);
     }
 
     @AfterEach
@@ -43,32 +45,46 @@ class BasketPageTest {
         driver.quit();
     }
 
+    @RepeatedTest(3)
+    @DisplayName("Проверка соответствия имен товаров и заявленной цены")
+    void nameAndPriceTest() {
+        List<Product> expectedGoods = mainPage.getAddedGoods();
+        List<Product> actualGoods = basketPage.getBasketGoods();
 
-    @Test
-    @DisplayName("Добавление товаров в корзину и проверка корзины")
-    void addGoodsTest() throws InterruptedException {
-        mainPage.addBasket(1);
-        mainPage.addBasket(2);
-        mainPage.addBasket(3);
-
-        Thread.sleep(2000);
-        mainPage.clickButtonBasket();
-
-        driver.switchTo();
-        Thread.sleep(2000);
-        basketPage = new BasketPage(driver);
-
-        List<Product> expectedGoods = mainPage.getExpectedGoods();
-        List<Product> actualGoods = basketPage.getActualGoods();
         if (expectedGoods.size() == actualGoods.size()) {
             Collections.sort(expectedGoods);
             Collections.sort(actualGoods);
-            for (int i = 0; i < expectedGoods.size(); i++) {
-                assertEquals(expectedGoods.get(i), actualGoods.get(i));
+            for (int i = 0; i < COUNT_GOODS; i++) {
+                Product expected = expectedGoods.get(i);
+                Product actual = actualGoods.get(i);
+                assertEquals(expected, actual);
             }
-
-        } else fail();
-
+        } else fail("Колличество добавленных товаров не соответствует колличеству в корзине");
     }
 
+    @Test
+    @DisplayName("Проверка сумарной стоймости товаров")
+    void sumPriceGoodsTest() {
+        int sumPriceBasketExpected = basketPage.getSumPriceBasketExpected();
+        int sumPriceBasketActual = basketPage.getSumPriceBasketActual();
+        assertEquals(sumPriceBasketExpected, sumPriceBasketActual);
+    }
+
+    @Test
+    @DisplayName("Проверка колличества товаров после добавления")
+    void countGoodsTest() {
+        String expected = "Товары, " + COUNT_GOODS + " шт.";
+        assertEquals(expected, basketPage.getTopCountLine());
+    }
+
+    @Test
+    @DisplayName("Проверка колличества товаров в корзине после увеличения/уменьшения колличества в позиции")
+    void chengCountGoodsTest() {
+        int newCount = COUNT_GOODS + 1;
+        basketPage.clickButtonCountPlus();
+        assertEquals("Товары, " + newCount + " шт.", basketPage.getTopCountLine());
+
+        basketPage.clickButtonCountMinus();
+        assertEquals("Товары, " + COUNT_GOODS + " шт.", basketPage.getTopCountLine());
+    }
 }
