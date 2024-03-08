@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +23,7 @@ public class AndroidCalculatorTest {
                 .amend("platformName", "Android")
                 .amend("appium:ensureWebviewsHavePages", true)
                 .amend("appium:nativeWebScreenshot", true)
-                .amend("appium:newCommandTimeout", 2000)
+                .amend("appium:newCommandTimeout", 1000)
                 .amend("appium:connectHardwareKeyboard", true);
         try {
             driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub/"), options);
@@ -33,6 +34,7 @@ public class AndroidCalculatorTest {
     }
 
     @Test
+    @DisplayName("Тест суммы")
     public void sumTest() {
         calculator.btnClear.click();
         calculator.btn01.click();
@@ -43,6 +45,7 @@ public class AndroidCalculatorTest {
     }
 
     @Test
+    @DisplayName("Тест вычетания")
     public void subTest() {
         calculator.btnClear.click();
         calculator.btn01.click();
@@ -53,6 +56,7 @@ public class AndroidCalculatorTest {
     }
 
     @Test
+    @DisplayName("Тест умножения")
     public void mulTest() {
         calculator.btnClear.click();
         calculator.btn01.click();
@@ -62,6 +66,7 @@ public class AndroidCalculatorTest {
         assertEquals("2 Результат вычисления", calculator.edtFormula.getText());
     }
     @Test
+    @DisplayName("Тест деления")
     public void divTest() {
         calculator.btnClear.click();
         calculator.btn01.click();
